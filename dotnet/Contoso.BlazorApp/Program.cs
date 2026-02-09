@@ -6,8 +6,15 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents();
+var apiBaseUrl = builder.Configuration["ApiSettings:BaseUrl"]
+    ?? "http://localhost:8080/api/";
+if (!apiBaseUrl.EndsWith("/", StringComparison.Ordinal))
+{
+    apiBaseUrl += "/";
+}
+
 builder.Services.AddHttpClient<ApiClient>(client =>
-    client.BaseAddress = new Uri("http://localhost:8080/api/"));
+    client.BaseAddress = new Uri(apiBaseUrl));
 
 var app = builder.Build();
 

@@ -21,6 +21,7 @@ services:
       - "3030:8080"
     environment:
       ApiSettings__BaseUrl: http://contoso-backend:8080/api
+      ASPNETCORE_ENVIRONMENT: Development
     depends_on:
       - contoso-backend
     networks:
