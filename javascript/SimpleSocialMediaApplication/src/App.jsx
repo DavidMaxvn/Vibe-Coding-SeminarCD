@@ -1,5 +1,3 @@
-
-
 import Home from './components/Home';
 import Search from './components/Search';
 import ApiStatus from './components/ApiStatus';

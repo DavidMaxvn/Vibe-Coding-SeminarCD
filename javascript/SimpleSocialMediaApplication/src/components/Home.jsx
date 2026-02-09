@@ -1,4 +1,4 @@
-
+import { useEffect, useState } from 'react';
 import PostDetails from './PostDetails';
 import PostModal from './PostModal';
 
