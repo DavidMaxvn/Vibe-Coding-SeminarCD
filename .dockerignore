@@ -1,0 +1,9 @@
+**
+!Dockerfile.java
+!Dockerfile.dotnet
+!dotnet/
+!dotnet/**
+!java/
+!java/socialapp/
+!java/socialapp/**
+!openapi.yaml

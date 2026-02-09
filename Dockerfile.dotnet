@@ -1,0 +1,22 @@
+# Build stage
+FROM mcr.microsoft.com/dotnet/sdk:10.0 AS build
+WORKDIR /src
+
+# Copy and restore
+COPY dotnet/ ./
+RUN dotnet restore ContosoWebApp.slnx
+
+# Publish Blazor app
+RUN dotnet publish Contoso.BlazorApp/Contoso.BlazorApp.csproj -c Release -o /app/publish
+
+# Runtime stage
+FROM mcr.microsoft.com/dotnet/aspnet:10.0 AS runtime
+WORKDIR /app
+
+ENV ApiSettings__BaseUrl=http://localhost:8080/api
+
+COPY --from=build /app/publish ./
+
+EXPOSE 8080
+
+ENTRYPOINT ["dotnet", "Contoso.BlazorApp.dll"]
