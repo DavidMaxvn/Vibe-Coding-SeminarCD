@@ -26,24 +26,24 @@ const Search = ({ onResults }) => {
   };
 
   return (
-    <form className="w-full max-w-xl mx-auto mt-4 flex gap-2" onSubmit={handleSearch}>
+    <form className="w-full flex items-center gap-2 mb-3" onSubmit={handleSearch}>
       <input
         type="text"
-        className="flex-1 border rounded px-3 py-2"
-        placeholder="Search posts or users..."
+        className="flex-1 h-8 rounded-md bg-white/90 px-2 text-xs text-gray-800"
+        placeholder="Enter keywords to search..."
         value={query}
         onChange={e => setQuery(e.target.value)}
         aria-label="Search posts or users"
       />
       <button
         type="submit"
-        className="bg-blue-600 text-white px-4 py-2 rounded"
+        className="h-8 px-3 rounded-md bg-sky-500 text-white text-xs"
         disabled={loading}
         aria-label="Search"
       >
-        {loading ? 'Searching...' : 'Search'}
+        {loading ? '...' : 'Go'}
       </button>
-      {error && <div className="text-red-600 ml-2">{error}</div>}
+      {error && <div className="text-white/90 text-[10px] ml-1">{error}</div>}
     </form>
   );
 };

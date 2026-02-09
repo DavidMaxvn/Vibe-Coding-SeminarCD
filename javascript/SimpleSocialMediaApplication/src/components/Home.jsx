@@ -3,12 +3,11 @@ import PostDetails from './PostDetails';
 import PostModal from './PostModal';
 
 
-const Home = ({ posts: externalPosts }) => {
+const Home = ({ posts: externalPosts, postModalOpen, setPostModalOpen }) => {
   const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [selectedPostId, setSelectedPostId] = useState(null);
-  const [showPostModal, setShowPostModal] = useState(false);
 
   useEffect(() => {
     if (externalPosts) {
@@ -34,10 +33,10 @@ const Home = ({ posts: externalPosts }) => {
     fetchPosts();
   }, [externalPosts]);
 
-  const handleOpenPostModal = () => setShowPostModal(true);
-  const handleClosePostModal = () => setShowPostModal(false);
+  const handleOpenPostModal = () => setPostModalOpen(true);
+  const handleClosePostModal = () => setPostModalOpen(false);
   const handlePostCreated = async () => {
-    setShowPostModal(false);
+    setPostModalOpen(false);
     setLoading(true);
     setError(null);
     try {
@@ -52,38 +51,53 @@ const Home = ({ posts: externalPosts }) => {
     }
   };
 
-  if (loading) return <div className="mt-8 text-gray-500">Loading posts...</div>;
-  if (error) return <div className="mt-8 text-red-600">{error}</div>;
+  if (loading) return <div className="mt-6 text-white/80">Loading posts...</div>;
+  if (error) return <div className="mt-6 text-white/90">{error}</div>;
 
   return (
-    <div className="w-full max-w-xl mx-auto mt-8">
-      <h2 className="text-2xl font-semibold mb-4">Recent Posts</h2>
-      <ul className="space-y-4">
+    <div className="w-full">
+      <div className="flex items-center gap-3 mb-3">
+        <div className="w-8 h-8 rounded-full bg-white/70" />
+        <div>
+          <div className="text-xs opacity-90">UserName</div>
+          <div className="text-sm font-semibold">Hi, there!</div>
+        </div>
+      </div>
+      <ul className="space-y-3">
         {posts.map(post => (
-          <li key={post.id} className="bg-white rounded-lg shadow p-4 cursor-pointer" onClick={() => setSelectedPostId(post.id)} tabIndex={0} aria-label={`View post by ${post.username}`}>
-            <div className="flex items-center justify-between">
-              <span className="font-bold">{post.username}</span>
-              <span className="text-xs text-gray-400">{new Date(post.createdAt).toLocaleString()}</span>
+          <li key={post.id} className="rounded-xl bg-[#E4A91A] p-3 cursor-pointer shadow-sm" onClick={() => setSelectedPostId(post.id)} tabIndex={0} aria-label={`View post by ${post.username}`}>
+            <div className="flex items-center gap-3">
+              <div className="w-8 h-8 rounded-full bg-white/70" />
+              <div className="flex-1">
+                <div className="text-xs font-semibold">{post.username}</div>
+                <div className="text-[11px] opacity-80">Hi, there!</div>
+              </div>
             </div>
-            <div className="mt-2 text-gray-800">{post.content}</div>
-            <div className="mt-2 flex gap-4 text-sm text-gray-500">
-              <span>👍 {post.likeCount}</span>
-              <span>💬 {post.commentCount}</span>
+            <div className="mt-2 text-sm text-white/90">{post.content}</div>
+            <div className="mt-2 flex items-center gap-4 text-xs">
+              <span className="flex items-center gap-1">❤ {post.likeCount}</span>
+              <span className="flex items-center gap-1">💬 {post.commentCount}</span>
             </div>
           </li>
         ))}
       </ul>
-      <button
-        className="mt-6 bg-blue-600 text-white px-4 py-2 rounded"
-        onClick={handleOpenPostModal}
-        aria-label="Create new post"
-      >
-        New Post
-      </button>
+      {posts.length === 0 && (
+        <div className="mt-4 rounded-xl bg-[#E4A91A] p-3 shadow-sm">
+          <div className="flex items-center gap-3">
+            <div className="w-8 h-8 rounded-full bg-white/70" />
+            <div className="text-xs font-semibold">UserName</div>
+          </div>
+          <div className="mt-2 text-sm text-white/90">Hi, there!</div>
+          <div className="mt-2 flex items-center gap-4 text-xs">
+            <span className="flex items-center gap-1">❤ 0</span>
+            <span className="flex items-center gap-1">💬 0</span>
+          </div>
+        </div>
+      )}
       {selectedPostId && (
         <PostDetails postId={selectedPostId} onClose={() => setSelectedPostId(null)} />
       )}
-      {showPostModal && (
+      {postModalOpen && (
         <PostModal onClose={handleClosePostModal} onPostCreated={handlePostCreated} />
       )}
     </div>

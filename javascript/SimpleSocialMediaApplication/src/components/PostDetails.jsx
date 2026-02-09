@@ -29,14 +29,14 @@ const PostDetails = ({ postId, onClose }) => {
   }, [postId]);
 
   if (!postId) return null;
-  if (loading) return <div className="mt-8 text-gray-500">Loading post details...</div>;
-  if (error) return <div className="mt-8 text-red-600">{error}</div>;
+  if (loading) return <div className="mt-6 text-white/80">Loading post details...</div>;
+  if (error) return <div className="mt-6 text-white/90">{error}</div>;
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-30 flex items-center justify-center z-40">
-      <div className="bg-white rounded-lg shadow-lg p-6 w-full max-w-lg relative">
+      <div className="bg-[#D49100] rounded-2xl shadow-lg p-6 w-full max-w-lg relative text-white">
         <button
-          className="absolute top-2 right-2 text-gray-400 hover:text-gray-700"
+          className="absolute top-2 right-2 text-white/80 hover:text-white"
           onClick={onClose}
           aria-label="Close"
         >
@@ -44,28 +44,43 @@ const PostDetails = ({ postId, onClose }) => {
         </button>
         <div className="mb-4">
           <span className="font-bold text-lg">{post.username}</span>
-          <span className="ml-2 text-xs text-gray-400">{new Date(post.createdAt).toLocaleString()}</span>
+          <span className="ml-2 text-xs opacity-80">{new Date(post.createdAt).toLocaleString()}</span>
         </div>
-        <div className="mb-4 text-gray-800">{post.content}</div>
-        <div className="mb-4 flex gap-4 text-sm text-gray-500">
-          <span>👍 {post.likeCount}</span>
+        <div className="mb-4 text-white/90">{post.content}</div>
+        <div className="mb-4 flex gap-4 text-sm">
+          <span>❤ {post.likeCount}</span>
           <span>💬 {post.commentCount}</span>
         </div>
         <div>
           <h3 className="font-semibold mb-2">Comments</h3>
           <ul className="space-y-2">
             {comments.length === 0 ? (
-              <li className="text-gray-400">No comments yet.</li>
+              <li className="text-white/80">No comments yet.</li>
             ) : (
               comments.map(comment => (
-                <li key={comment.id} className="bg-gray-100 rounded p-2">
+                <li key={comment.id} className="bg-[#E4A91A] rounded-lg p-2">
                   <span className="font-bold">{comment.username}</span>
-                  <span className="ml-2 text-xs text-gray-400">{new Date(comment.createdAt).toLocaleString()}</span>
-                  <div className="mt-1 text-gray-700">{comment.content}</div>
+                  <span className="ml-2 text-xs opacity-80">{new Date(comment.createdAt).toLocaleString()}</span>
+                  <div className="mt-1 text-white/90">{comment.content}</div>
                 </li>
               ))
             )}
           </ul>
+        </div>
+        <div className="mt-4 flex items-center gap-2">
+          <input
+            type="text"
+            className="flex-1 rounded-lg bg-white/90 px-3 py-2 text-sm text-gray-800"
+            placeholder="Enter comment"
+            aria-label="Enter comment"
+          />
+          <button
+            type="button"
+            className="w-9 h-9 rounded-lg bg-sky-500 text-white text-xl leading-none"
+            aria-label="Add comment"
+          >
+            +
+          </button>
         </div>
       </div>
     </div>
