@@ -1,0 +1,117 @@
+@inject ApiClient ApiClient
+
+@if (!string.IsNullOrWhiteSpace(PostId))
+{
+    <div class="overlay">
+        <div class="details-card">
+            <button class="modal-close" @onclick="OnClose">✕</button>
+            @if (_loading)
+            {
+                <div class="details-loading">Loading post details...</div>
+            }
+            else if (!string.IsNullOrWhiteSpace(_error))
+            {
+                <div class="details-error">@_error</div>
+            }
+            else if (_post is not null)
+            {
+                <div class="details-header">
+                    <span class="details-user">@_post.Username</span>
+                    <span class="details-time">@FormatDate(_post.CreatedAt)</span>
+                </div>
+                <div class="details-content">@_post.Content</div>
+                <div class="details-meta">
+                    <span>❤ @_post.LikeCount</span>
+                    <span>💬 @_post.CommentCount</span>
+                </div>
+                <div class="details-comments">
+                    <h3>Comments</h3>
+                    @if (_comments.Count == 0)
+                    {
+                        <div class="details-empty">No comments yet.</div>
+                    }
+                    else
+                    {
+                        <ul>
+                            @foreach (var comment in _comments)
+                            {
+                                <li>
+                                    <div class="comment-user">@comment.Username</div>
+                                    <div class="comment-time">@FormatDate(comment.CreatedAt)</div>
+                                    <div class="comment-content">@comment.Content</div>
+                                </li>
+                            }
+                        </ul>
+                    }
+                </div>
+                <div class="comment-bar">
+                    <input placeholder="Enter comment" @bind="_commentText" aria-label="Enter comment" />
+                    <button type="button" @onclick="SubmitComment">+</button>
+                </div>
+            }
+        </div>
+    </div>
+}
+
+@code {
+    [Parameter] public string? PostId { get; set; }
+    [Parameter] public EventCallback OnClose { get; set; }
+
+    private Post? _post;
+    private List<Comment> _comments = new();
+    private bool _loading;
+    private string? _error;
+    private string _commentText = string.Empty;
+
+    protected override async Task OnParametersSetAsync()
+    {
+        if (string.IsNullOrWhiteSpace(PostId))
+        {
+            return;
+        }
+
+        _loading = true;
+        _error = null;
+        _post = null;
+        _comments = new List<Comment>();
+
+        try
+        {
+            _post = await ApiClient.GetPostAsync(PostId);
+            _comments = await ApiClient.GetCommentsAsync(PostId);
+        }
+        catch
+        {
+            _error = "Could not load post details.";
+        }
+        finally
+        {
+            _loading = false;
+        }
+    }
+
+    private async Task SubmitComment()
+    {
+        if (string.IsNullOrWhiteSpace(PostId) || string.IsNullOrWhiteSpace(_commentText))
+        {
+            return;
+        }
+
+        var success = await ApiClient.CreateCommentAsync(PostId, new CommentCreateRequest
+        {
+            Username = "UserName",
+            Content = _commentText
+        });
+
+        if (success)
+        {
+            _commentText = string.Empty;
+            _comments = await ApiClient.GetCommentsAsync(PostId);
+        }
+    }
+
+    private static string FormatDate(string value)
+    {
+        return DateTime.TryParse(value, out var parsed) ? parsed.ToLocalTime().ToString("g") : value;
+    }
+}

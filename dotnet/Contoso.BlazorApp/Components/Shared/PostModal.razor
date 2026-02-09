@@ -1,0 +1,63 @@
+@inject ApiClient ApiClient
+
+@if (IsOpen)
+{
+    <div class="overlay">
+        <form class="modal-card" @onsubmit="HandleSubmit">
+            <button class="modal-close" type="button" @onclick="OnClose">✕</button>
+            <h2>Create New Post</h2>
+            <label class="field">
+                <span>Username</span>
+                <input @bind="_username" required />
+            </label>
+            <label class="field">
+                <span>Content</span>
+                <textarea @bind="_content" rows="4" required></textarea>
+            </label>
+            @if (!string.IsNullOrWhiteSpace(_error))
+            {
+                <div class="error-text">@_error</div>
+            }
+            <button class="primary-button" type="submit" disabled="@_loading">
+                @(_loading ? "Posting..." : "Post")
+            </button>
+        </form>
+    </div>
+}
+
+@code {
+    [Parameter] public bool IsOpen { get; set; }
+    [Parameter] public EventCallback OnClose { get; set; }
+    [Parameter] public EventCallback OnPostCreated { get; set; }
+
+    private string _username = string.Empty;
+    private string _content = string.Empty;
+    private bool _loading;
+    private string? _error;
+
+    private async Task HandleSubmit()
+    {
+        _loading = true;
+        _error = null;
+
+        var response = await ApiClient.CreatePostAsync(new PostCreateRequest
+        {
+            Username = _username,
+            Content = _content
+        });
+
+        if (response is null)
+        {
+            _error = "Failed to create post";
+        }
+        else
+        {
+            await OnPostCreated.InvokeAsync();
+            await OnClose.InvokeAsync();
+            _username = string.Empty;
+            _content = string.Empty;
+        }
+
+        _loading = false;
+    }
+}

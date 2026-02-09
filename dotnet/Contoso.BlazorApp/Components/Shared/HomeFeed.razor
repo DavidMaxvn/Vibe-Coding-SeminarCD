@@ -1,0 +1,90 @@
+@inject ApiClient ApiClient
+
+<div class="feed">
+    <div class="feed-header">
+        <div class="avatar"></div>
+        <div>
+            <div class="username">UserName</div>
+            <div class="greeting">Hi, there!</div>
+        </div>
+    </div>
+
+    <ul class="post-list">
+        @foreach (var post in Posts)
+        {
+            <li class="post-item" @onclick="() => ShowDetails(post.Id)">
+                <div class="post-header">
+                    <div class="avatar"></div>
+                    <div>
+                        <div class="username">@post.Username</div>
+                        <div class="greeting">Hi, there!</div>
+                    </div>
+                </div>
+                <div class="post-content">@post.Content</div>
+                <div class="post-meta">
+                    <span>❤ @post.LikeCount</span>
+                    <span>💬 @post.CommentCount</span>
+                </div>
+            </li>
+        }
+    </ul>
+
+    @if (Posts.Count == 0)
+    {
+        <div class="post-empty">
+            <div class="post-header">
+                <div class="avatar"></div>
+                <div class="username">UserName</div>
+            </div>
+            <div class="post-content">Hi, there!</div>
+            <div class="post-meta">
+                <span>❤ 0</span>
+                <span>💬 0</span>
+            </div>
+        </div>
+    }
+
+    <PostDetailsModal PostId="_selectedPostId" OnClose="CloseDetails" />
+    <PostModal IsOpen="PostModalOpen" OnClose="ClosePostModal" OnPostCreated="HandlePostCreated" />
+</div>
+
+@code {
+    [Parameter] public List<Post>? ExternalPosts { get; set; }
+    [Parameter] public bool PostModalOpen { get; set; }
+    [Parameter] public EventCallback<bool> PostModalOpenChanged { get; set; }
+
+    private List<Post> Posts { get; set; } = new();
+    private string? _selectedPostId;
+
+    protected override async Task OnParametersSetAsync()
+    {
+        if (ExternalPosts is not null)
+        {
+            Posts = ExternalPosts;
+            return;
+        }
+
+        Posts = await ApiClient.GetPostsAsync();
+    }
+
+    private void ShowDetails(string postId)
+    {
+        _selectedPostId = postId;
+    }
+
+    private Task CloseDetails()
+    {
+        _selectedPostId = null;
+        return Task.CompletedTask;
+    }
+
+    private Task ClosePostModal()
+    {
+        return PostModalOpenChanged.InvokeAsync(false);
+    }
+
+    private async Task HandlePostCreated()
+    {
+        Posts = await ApiClient.GetPostsAsync();
+    }
+}

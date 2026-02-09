@@ -1,0 +1,58 @@
+﻿@page "/"
+
+<PageTitle>Contoso Social</PageTitle>
+
+<ApiStatus />
+
+<div class="app-shell">
+	<div class="phone-frame">
+		<div class="phone-inner">
+			<aside class="rail">
+				<button class="rail-button" type="button" aria-label="Home">
+					<IconHome />
+				</button>
+				<button class="rail-button" type="button" aria-label="Search">
+					<IconSearch />
+				</button>
+				<button class="rail-button" type="button" aria-label="Profile">
+					<IconPerson />
+				</button>
+				<div class="rail-spacer"></div>
+				<button class="rail-button" type="button" aria-label="Close">✕</button>
+			</aside>
+
+			<main class="phone-content">
+				<SearchBar OnResults="HandleResults" />
+				<HomeFeed ExternalPosts="_searchResults" PostModalOpen="_postModalOpen" PostModalOpenChanged="OnPostModalChanged" />
+			</main>
+
+			<aside class="rail">
+				<div class="rail-spacer"></div>
+				<button class="rail-action" type="button" aria-label="Create new post" @onclick="OpenPostModal">+</button>
+			</aside>
+		</div>
+	</div>
+</div>
+
+@code {
+	private List<Post>? _searchResults;
+	private bool _postModalOpen;
+
+	private Task HandleResults(List<Post> results)
+	{
+		_searchResults = results;
+		return Task.CompletedTask;
+	}
+
+	private Task OpenPostModal()
+	{
+		_postModalOpen = true;
+		return Task.CompletedTask;
+	}
+
+	private Task OnPostModalChanged(bool isOpen)
+	{
+		_postModalOpen = isOpen;
+		return Task.CompletedTask;
+	}
+}

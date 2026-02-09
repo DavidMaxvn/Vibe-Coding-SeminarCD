@@ -1,0 +1,41 @@
+@inject ApiClient ApiClient
+
+<form class="search-bar" @onsubmit="HandleSearch">
+    <input class="search-input" type="text" placeholder="Enter keywords to search..." @bind="_query" aria-label="Search posts or users" />
+    <button class="search-button" type="submit" disabled="@_loading">@(_loading ? "..." : "Go")</button>
+    @if (!string.IsNullOrWhiteSpace(_error))
+    {
+        <span class="search-error">@_error</span>
+    }
+</form>
+
+@code {
+    [Parameter] public EventCallback<List<Post>> OnResults { get; set; }
+
+    private string _query = string.Empty;
+    private bool _loading;
+    private string? _error;
+
+    private async Task HandleSearch()
+    {
+        _loading = true;
+        _error = null;
+        try
+        {
+            var posts = await ApiClient.GetPostsAsync();
+            var filtered = posts.Where(post =>
+                    post.Content.Contains(_query, StringComparison.OrdinalIgnoreCase) ||
+                    post.Username.Contains(_query, StringComparison.OrdinalIgnoreCase))
+                .ToList();
+            await OnResults.InvokeAsync(filtered);
+        }
+        catch
+        {
+            _error = "Could not search posts.";
+        }
+        finally
+        {
+            _loading = false;
+        }
+    }
+}

@@ -1,0 +1,40 @@
+@if (IsOpen)
+{
+    <div class="overlay">
+        <form class="modal-card" @onsubmit="HandleSubmit">
+            <button class="modal-close" type="button" @onclick="OnClose">✕</button>
+            <h2>Enter Your Name</h2>
+            <label class="field">
+                <span>Name</span>
+                <input @bind="_name" required />
+            </label>
+            @if (!string.IsNullOrWhiteSpace(_error))
+            {
+                <div class="error-text">@_error</div>
+            }
+            <button class="primary-button" type="submit">Submit</button>
+        </form>
+    </div>
+}
+
+@code {
+    [Parameter] public bool IsOpen { get; set; }
+    [Parameter] public EventCallback OnClose { get; set; }
+    [Parameter] public EventCallback<string> OnSubmit { get; set; }
+
+    private string _name = string.Empty;
+    private string? _error;
+
+    private async Task HandleSubmit()
+    {
+        if (string.IsNullOrWhiteSpace(_name))
+        {
+            _error = "Name is required";
+            return;
+        }
+
+        _error = null;
+        await OnSubmit.InvokeAsync(_name);
+        await OnClose.InvokeAsync();
+    }
+}

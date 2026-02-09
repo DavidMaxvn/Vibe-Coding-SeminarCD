@@ -1,0 +1,22 @@
+@inject ApiClient ApiClient
+
+@if (_status == ApiStatusState.Unreachable)
+{
+    <div class="api-banner">Backend API unavailable or unreachable</div>
+}
+
+@code {
+    private ApiStatusState _status = ApiStatusState.Checking;
+
+    protected override async Task OnInitializedAsync()
+    {
+        _status = await ApiClient.IsApiAvailableAsync() ? ApiStatusState.Ok : ApiStatusState.Unreachable;
+    }
+
+    private enum ApiStatusState
+    {
+        Checking,
+        Ok,
+        Unreachable
+    }
+}
