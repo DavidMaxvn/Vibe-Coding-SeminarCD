@@ -57,17 +57,17 @@ const Home = ({ posts: externalPosts, postModalOpen, setPostModalOpen }) => {
   return (
     <div className="w-full">
       <div className="flex items-center gap-3 mb-3">
-        <div className="w-8 h-8 rounded-full bg-white/70" />
+        <div className="w-10 h-10 rounded-full bg-white/80" />
         <div>
           <div className="text-xs opacity-90">UserName</div>
           <div className="text-sm font-semibold">Hi, there!</div>
         </div>
       </div>
-      <ul className="space-y-3">
+      <ul className="space-y-0">
         {posts.map(post => (
-          <li key={post.id} className="rounded-xl bg-[#E4A91A] p-3 cursor-pointer shadow-sm" onClick={() => setSelectedPostId(post.id)} tabIndex={0} aria-label={`View post by ${post.username}`}>
+          <li key={post.id} className="p-3 cursor-pointer border-t border-white/30" onClick={() => setSelectedPostId(post.id)} tabIndex={0} aria-label={`View post by ${post.username}`}>
             <div className="flex items-center gap-3">
-              <div className="w-8 h-8 rounded-full bg-white/70" />
+              <div className="w-10 h-10 rounded-full bg-white/80" />
               <div className="flex-1">
                 <div className="text-xs font-semibold">{post.username}</div>
                 <div className="text-[11px] opacity-80">Hi, there!</div>
@@ -82,9 +82,9 @@ const Home = ({ posts: externalPosts, postModalOpen, setPostModalOpen }) => {
         ))}
       </ul>
       {posts.length === 0 && (
-        <div className="mt-4 rounded-xl bg-[#E4A91A] p-3 shadow-sm">
+        <div className="mt-3 p-3 border-t border-white/30">
           <div className="flex items-center gap-3">
-            <div className="w-8 h-8 rounded-full bg-white/70" />
+            <div className="w-10 h-10 rounded-full bg-white/80" />
             <div className="text-xs font-semibold">UserName</div>
           </div>
           <div className="mt-2 text-sm text-white/90">Hi, there!</div>

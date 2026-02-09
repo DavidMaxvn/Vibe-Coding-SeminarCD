@@ -34,7 +34,7 @@ const PostDetails = ({ postId, onClose }) => {
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-30 flex items-center justify-center z-40">
-      <div className="bg-[#D49100] rounded-2xl shadow-lg p-6 w-full max-w-lg relative text-white">
+      <div className="bg-[#D49100] rounded-2xl shadow-lg p-5 w-full max-w-lg relative text-white">
         <button
           className="absolute top-2 right-2 text-white/80 hover:text-white"
           onClick={onClose}
@@ -42,12 +42,12 @@ const PostDetails = ({ postId, onClose }) => {
         >
           ✕
         </button>
-        <div className="mb-4">
+        <div className="mb-3">
           <span className="font-bold text-lg">{post.username}</span>
           <span className="ml-2 text-xs opacity-80">{new Date(post.createdAt).toLocaleString()}</span>
         </div>
-        <div className="mb-4 text-white/90">{post.content}</div>
-        <div className="mb-4 flex gap-4 text-sm">
+        <div className="mb-3 text-white/90">{post.content}</div>
+        <div className="mb-3 flex gap-4 text-sm">
           <span>❤ {post.likeCount}</span>
           <span>💬 {post.commentCount}</span>
         </div>
@@ -70,13 +70,13 @@ const PostDetails = ({ postId, onClose }) => {
         <div className="mt-4 flex items-center gap-2">
           <input
             type="text"
-            className="flex-1 rounded-lg bg-white/90 px-3 py-2 text-sm text-gray-800"
+            className="flex-1 h-7 rounded-md bg-white/95 px-2 text-[11px] text-gray-800"
             placeholder="Enter comment"
             aria-label="Enter comment"
           />
           <button
             type="button"
-            className="w-9 h-9 rounded-lg bg-sky-500 text-white text-xl leading-none"
+            className="w-7 h-7 rounded-md bg-sky-500 text-white text-sm leading-none"
             aria-label="Add comment"
           >
             +

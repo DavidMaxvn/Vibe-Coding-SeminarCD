@@ -29,7 +29,7 @@ const Search = ({ onResults }) => {
     <form className="w-full flex items-center gap-2 mb-3" onSubmit={handleSearch}>
       <input
         type="text"
-        className="flex-1 h-8 rounded-md bg-white/90 px-2 text-xs text-gray-800"
+        className="flex-1 h-7 rounded-md bg-white/95 px-2 text-[11px] text-gray-800"
         placeholder="Enter keywords to search..."
         value={query}
         onChange={e => setQuery(e.target.value)}
@@ -37,7 +37,7 @@ const Search = ({ onResults }) => {
       />
       <button
         type="submit"
-        className="h-8 px-3 rounded-md bg-sky-500 text-white text-xs"
+        className="h-7 w-7 rounded-md bg-sky-500 text-white text-[10px]"
         disabled={loading}
         aria-label="Search"
       >

@@ -10,11 +10,11 @@ const App = () => {
   const [searchResults, setSearchResults] = useState(null);
   const [postModalOpen, setPostModalOpen] = useState(false);
   return (
-    <div className="min-h-screen bg-[#E0A200] text-white font-['Baloo_2',cursive]">
+    <div className="min-h-screen bg-[#1f1f1f] text-white font-['Baloo_2',cursive] flex items-center justify-center p-6">
       <ApiStatus />
-      <div className="mx-auto max-w-[420px] px-3 py-6">
-        <div className="flex gap-3 items-stretch">
-          <aside className="w-12 rounded-3xl bg-[#D49100] flex flex-col items-center py-4 gap-4 shadow-lg">
+      <div className="w-[360px] h-[640px] rounded-[28px] bg-[#E0A200] shadow-2xl overflow-hidden">
+        <div className="h-full flex gap-2 p-3">
+          <aside className="w-12 rounded-2xl bg-[#D49100] flex flex-col items-center py-4 gap-4 shadow-md">
             <button className="p-2 rounded-lg bg-white/10 text-white" aria-label="Home" type="button">
               <IconHome className="w-5 h-5" />
             </button>
@@ -29,11 +29,11 @@ const App = () => {
               ✕
             </button>
           </aside>
-          <main className="flex-1 rounded-3xl bg-[#D49100] px-3 py-3 shadow-lg min-h-[520px]">
+          <main className="flex-1 rounded-2xl bg-[#D49100] px-3 py-3 shadow-md">
             <Search onResults={setSearchResults} />
             <Home posts={searchResults} postModalOpen={postModalOpen} setPostModalOpen={setPostModalOpen} />
           </main>
-          <aside className="w-12 rounded-3xl bg-[#D49100] flex flex-col items-center py-4 shadow-lg">
+          <aside className="w-12 rounded-2xl bg-[#D49100] flex flex-col items-center py-4 shadow-md">
             <div className="flex-1" />
             <button
               className="w-9 h-9 rounded-xl bg-white text-[#D49100] text-2xl leading-none flex items-center justify-center shadow"
